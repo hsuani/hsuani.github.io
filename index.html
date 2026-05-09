@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Yu-Hsuan Tseng — End-to-End AI Imaging</title>
+<meta name="description" content="AI imaging engineer and product planner. ISP, computer vision, multimodal models, on-device productization, NVIDIA inference stack (TensorRT / DeepStream)." />
+<meta name="author" content="Yu-Hsuan Tseng" />
+
+<meta property="og:title" content="Yu-Hsuan Tseng — End-to-End AI Imaging" />
+<meta property="og:description" content="AI imaging engineer and product planner. ISP, computer vision, multimodal models, on-device productization, NVIDIA inference stack." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://hsuani.github.io/" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top">hsuani</a>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#publications">Publications</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero wrap">
+  <p class="eyebrow">Taipei / Hsinchu, Taiwan</p>
+  <h1>Yu-Hsuan Tseng</h1>
+  <p class="tagline">
+    End-to-end AI imaging — <strong>product planning</strong>, <strong>image signal processing</strong>,
+    <strong>multimodal models</strong>, <strong>on-device productization</strong>.
+  </p>
+  <p class="bio">
+    8 years across hands-on technical and technical-leader roles. Built and shipped from
+    sensor-level ISP pipelines (Qualcomm) through deep-learning research (Academia Sinica, NCREE)
+    to multimodal AI productization (Meitu) and independent algorithm development for AI makeup
+    applications. Patent owner; POSCO 2019 1st-prize R&D; TREC 2020 CAsT 2nd Prize.
+    Trilingual (Chinese / English / Korean).
+  </p>
+  <div class="links">
+    <a class="btn primary" href="assets/CV.pdf" download>Download CV (PDF)</a>
+    <a class="btn" href="https://github.com/hsuani" target="_blank" rel="noopener">GitHub</a>
+    <a class="btn" href="https://www.linkedin.com/in/yhtseng91/" target="_blank" rel="noopener">LinkedIn</a>
+    <a class="btn" href="mailto:cstacy913@gmail.com">Email</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="wrap">
+  <h2>About</h2>
+  <div class="about-grid">
+    <div>
+      <p>
+        I work across the full vertical stack of AI imaging products — from
+        the sensor-level pipeline that determines what an image even looks
+        like, through the models that interpret it, to the product features
+        that turn it into something users care about.
+      </p>
+      <p>
+        At <strong>Qualcomm</strong> I tuned ISP modules (texture, noise, tone
+        mapping, alignment, AF, EIS) and built automated image-quality
+        evaluation tooling for mobile and PC camera platforms shipped at scale.
+      </p>
+      <p>
+        At <strong>Meitu (Evelab Insight)</strong> I led pain-point analysis
+        and feature planning for multimodal AI applications across the
+        skin-analysis product line, brokering alignment across algorithm,
+        engineering, UI, ISP, and commercial teams. One customer-critical
+        feature went from an original 6-month engineering estimate to
+        production in 1 month, with a +20% post-launch sales lift reported by
+        the customer.
+      </p>
+      <p>
+        Earlier I led a 3-engineer team in Seoul building a real-time
+        3D + structural-analysis collaboration platform (granted patent;
+        POSCO 1st-prize R&D, 2019), in Korean as the working language. Today
+        I'm freelancing on AI makeup simulation — image-algorithm development
+        and on-device productization for shipping mobile apps.
+      </p>
+      <p>
+        In parallel, I'm running a focused 2-week sprint on the NVIDIA
+        inference stack — building an industrial AOI defect detection MVP
+        through PyTorch → ONNX → TensorRT → DeepStream. The work
+        deliberately bridges my ISP/imaging background to AOI: image
+        quality is upstream of every downstream metric, and that perspective
+        shapes calibration set design and robustness evaluation.
+      </p>
+    </div>
+    <aside class="quick-facts">
+      <h3>Quick facts</h3>
+      <dl>
+        <dt>Focus</dt>
+        <dd>AI imaging · ISP · multimodal · on-device</dd>
+        <dt>Open to</dt>
+        <dd>Senior TPM / AI imaging product roles</dd>
+        <dt>Based</dt>
+        <dd>Hsinchu / Taipei</dd>
+        <dt>Languages</dt>
+        <dd>Chinese (native) · English (fluent) · Korean (advanced)</dd>
+        <dt>Honors</dt>
+        <dd>POSCO 1st R&D · TREC 2nd · 1 patent</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="wrap">
+  <h2>Selected Projects</h2>
+
+  <article class="project">
+    <div class="project-head">
+      <h3>AOI Defect Detection — TensorRT + DeepStream MVP <span class="status">Current · 2-week sprint</span></h3>
+      <p class="project-tags">NVIDIA stack · TensorRT · ONNX · YOLOv8-seg · industrial AOI · MVTec AD</p>
+    </div>
+    <p>
+      End-to-end AOI defect detection pipeline targeting NVIDIA Metropolis
+      (Manufacturing): <strong>PyTorch → ONNX → TensorRT (FP32 / FP16 / INT8)
+      → DeepStream</strong>. Trained YOLOv8s-seg on MVTec AD; cross-class study
+      (transistor / cable / metal_nut) shows supervised seg ceiling depends
+      more on defect-type composition (surface vs positional) than on sample
+      count — empirically motivating anomaly-detection paradigm for
+      positional-anomaly-dominant cases.
+    </p>
+    <img src="assets/img/aoi/trt_benchmark_t4.png"
+         alt="TensorRT FP32/FP16/INT8 benchmark on Tesla T4 — latency, throughput, engine size"
+         style="width:100%;border-radius:6px;margin:0.5rem 0;" loading="lazy" />
+    <ul class="project-bullets">
+      <li><strong>Model</strong>: YOLOv8s-seg fine-tuned on MVTec metal_nut → mAP@50 0.75 (mask).</li>
+      <li><strong>TensorRT optimization (Tesla T4, batch=1, imgsz=640)</strong>:
+        FP16 <strong>3.13× speedup</strong> (10.91 → 3.49 ms),
+        INT8 <strong>5.22×</strong> (10.91 → 2.09 ms, 478 qps) over FP32.</li>
+      <li><strong>INT8 calibration</strong>: implemented <code>IInt8EntropyCalibrator2</code>
+        with 335 MVTec metal_nut images; functional drift FP16 &lt; 0.001%, INT8 8.6%.</li>
+      <li><strong>ISP-aware framing</strong>: leveraged Qualcomm ISP background
+        for calibration set composition + planned robustness study under sensor
+        perturbations.</li>
+      <li><strong>DeepStream pipeline integration</strong> in progress
+        (NVIDIA LaunchPad / Brev).</li>
+    </ul>
+    <div class="links inline">
+      <a class="btn small" href="https://github.com/hsuani/aoi-deepstream-tensorrt" target="_blank" rel="noopener">GitHub repo</a>
+    </div>
+    <p class="project-note">Active development — repo updated daily; access on request if private.</p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3>AI Makeup Simulation Platform <span class="status">Current · Freelance</span></h3>
+      <p class="project-tags">computer vision · vision-language · color management · on-device</p>
+    </div>
+    <p>
+      Independent end-to-end algorithm work for an AI makeup simulation
+      product. Self-defined multi-phase delivery roadmap covering workflow
+      design, multimodal-model evaluation, per-scene algorithm refinement,
+      and on-device deployment.
+    </p>
+    <ul class="project-bullets">
+      <li>CV-based makeup rendering with iterative refinement against domain-expert (makeup-artist) feedback.</li>
+      <li>Image color correction tuned across scene types.</li>
+      <li>Custom annotation tooling feeding a learned scoring model for evaluation.</li>
+      <li>On-device productization: model optimization, integration, deployment.</li>
+    </ul>
+    <p class="project-note">Client work — code not public.</p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3>PDF-based 3D Construction Management Platform <span class="status">IDM · 2018–2020</span></h3>
+      <p class="project-tags">3D visualization · platform · zero-install · Korean working environment</p>
+    </div>
+    <p>
+      Real-time 3D + structural-analysis collaboration platform for
+      cable-bridge construction, opened directly inside Acrobat with no
+      specialized software install. Led a 3-engineer team in Seoul (Korean
+      working language); chaired daily syncs with the project lead and
+      bi-weekly meetings with structural engineers, both without software
+      background. Drove three rounds of on-site iteration with construction
+      managers and workers to lock-down.
+    </p>
+    <a class="video-card"
+       href="https://www.youtube.com/watch?v=AFL5TNc5uho"
+       target="_blank" rel="noopener"
+       aria-label="Watch demo on YouTube (opens in new tab)">
+      <img src="https://img.youtube.com/vi/AFL5TNc5uho/hqdefault.jpg"
+           alt="PDF-based 3D Construction Management Platform — demo video thumbnail"
+           loading="lazy" />
+      <span class="video-play" aria-hidden="true">▶</span>
+      <span class="video-caption">Watch the platform demo on YouTube</span>
+    </a>
+    <ul class="project-bullets">
+      <li><strong>Patent granted (2019)</strong>: PDF-based Digital Drawing for Construction Management.</li>
+      <li><strong>POSCO 2019 Best Annual R&D Project — 1st Prize.</strong></li>
+      <li>Estimated up to 40% labor-day savings vs. on-site recomputation workflow.</li>
+    </ul>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3>DANet — Cross-Domain Generalization for Remote Sensing <span class="status">NCREE · 2021–2022</span></h3>
+      <p class="project-tags">computer vision · domain generalization · attention · Siamese network</p>
+    </div>
+    <p>
+      Attention-based loss and Siamese architecture improving cross-domain
+      generalization for satellite-imagery road extraction given
+      single-domain training data. Disaster-management-driven motivation
+      (post-event imagery often differs sharply from training distribution).
+    </p>
+    <div class="links inline">
+      <a class="btn small" href="https://github.com/hsuani/DANet" target="_blank" rel="noopener">GitHub repo</a>
+    </div>
+    <p class="project-note">Paper under preparation for resubmission to IJDRR.</p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3>Semantic Query Expansion for Conversational IR <span class="status">Academia Sinica · 2020 · TREC CAsT 2nd Prize</span></h3>
+      <p class="project-tags">NLP · conversational IR · query expansion · BERT</p>
+    </div>
+    <p>
+      Co-designed a query-expansion model addressing the ellipsis problem in
+      conversational queries, expanding user turns with latent queries derived
+      from related passages. Evaluated on a 30M-passage corpus. Awarded
+      <strong>2nd Prize</strong> at the TREC 2020 CAsT (Conversational
+      Assistance Track) evaluation.
+    </p>
+    <div class="links inline">
+      <a class="btn small" href="https://github.com/hsuani/Semantic-Query-Expansion_TREC-CAsT-ASCFDA-" target="_blank" rel="noopener">GitHub repo</a>
+      <a class="btn small" href="https://trec.nist.gov/pubs/trec29/papers/ASCFDA.C.pdf" target="_blank" rel="noopener">Paper (PDF)</a>
+    </div>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3>Liveness Outlier Detection for Audio Tracks <span class="status">Side Project · 2024</span></h3>
+      <p class="project-tags">audio signal processing · spectrogram features · outlier detection</p>
+    </div>
+    <p>
+      Predict outlier tracks where the Spotify <code>liveness</code> label
+      should be manually reviewed (i.e. tracks whose label likely
+      misrepresents whether the recording is performed live). Built two
+      methods: one using Spotify's audio-analysis features, one using
+      hand-engineered features extracted from spectrograms. Discussion of
+      tradeoffs and failure modes is included in the notebook.
+    </p>
+    <div class="links inline">
+      <a class="btn small" href="https://github.com/hsuani/liveness-outlier-detection" target="_blank" rel="noopener">GitHub repo</a>
+      <a class="btn small" href="https://colab.research.google.com/drive/1J8MtwBb95gUfHeCGJbeTKstWQ5tyc6if?usp=sharing" target="_blank" rel="noopener">Open in Colab</a>
+    </div>
+  </article>
+
+</section>
+
+<!-- PUBLICATIONS -->
+<section id="publications" class="wrap">
+  <h2>Publications</h2>
+  <ul class="pub-list">
+    <li>
+      <strong>Road Extraction on Satellite Imagery for Deep-Learning-Based Post-Disaster Management.</strong>
+      1st author. International Journal of Disaster Risk Reduction (IJDRR) — under preparation for resubmission.
+    </li>
+    <li>
+      <strong>Query Expansion with Semantic-Based Ellipsis Reduction for Conversational IR.</strong>
+      Co-1st author. TREC 2020 (Text REtrieval Conference).
+      <a href="https://trec.nist.gov/pubs/trec29/papers/ASCFDA.C.pdf" target="_blank" rel="noopener">[PDF]</a>
+    </li>
+    <li>
+      <strong>Experimental Study of High-Strength SFRC Columns under Uniaxial Compression Loading.</strong>
+      1st author. KKHTCNN Symposium on Civil Engineering, 2015.
+    </li>
+  </ul>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="wrap">
+  <h2>Experience</h2>
+  <div class="exp-list">
+    <div class="exp-row">
+      <div class="exp-when">2026 / 04 – Present</div>
+      <div class="exp-what">
+        <h3>AI Algorithm Engineer · <span class="muted">Freelance</span></h3>
+        <p>End-to-end AI makeup simulation: algorithm development, evaluation pipeline, on-device productization.</p>
+      </div>
+    </div>
+    <div class="exp-row">
+      <div class="exp-when">2025 / 03 – 2026 / 04</div>
+      <div class="exp-what">
+        <h3>AI Technical Manager · <span class="muted">Evelab Insight (Meitu Group)</span></h3>
+        <p>Multimodal AI feature planning, cross-functional execution, KPI definition for skin-analysis products.</p>
+      </div>
+    </div>
+    <div class="exp-row">
+      <div class="exp-when">2024 / 04 – 2025 / 03</div>
+      <div class="exp-what">
+        <h3>Career Interim · <span class="muted">Self-directed study + side project</span></h3>
+        <p>ISP / ML / DL refresher; revised NCREE paper for resubmission; built audio-classification side project.</p>
+      </div>
+    </div>
+    <div class="exp-row">
+      <div class="exp-when">2022 / 04 – 2024 / 04</div>
+      <div class="exp-what">
+        <h3>Image Signal Processing Engineer · <span class="muted">Qualcomm</span></h3>
+        <p>ISP module calibration, tuning, IQ validation across mobile and PC camera platforms.</p>
+      </div>
+    </div>
+    <div class="exp-row">
+      <div class="exp-when">2021 / 01 – 2022 / 04</div>
+      <div class="exp-what">
+        <h3>Research Fellow · <span class="muted">AI Research Center, NCREE</span></h3>
+        <p>Computer vision for remote-sensing disaster management; cross-domain generalization research.</p>
+      </div>
+    </div>
+    <div class="exp-row">
+      <div class="exp-when">2020 / 03 – 2020 / 12</div>
+      <div class="exp-what">
+        <h3>Research Assistant · <span class="muted">Computational Finance &amp; Data Analytics Lab, Academia Sinica</span></h3>
+        <p>NLP / conversational IR; recommendation systems. TREC 2020 CAsT 2nd Prize.</p>
+      </div>
+    </div>
+    <div class="exp-row">
+      <div class="exp-when">2018 / 01 – 2020 / 01</div>
+      <div class="exp-what">
+        <h3>Information Modeling Engineer &amp; Platform Lead · <span class="muted">IDM Co., Seoul</span></h3>
+        <p>Led 3-engineer team in Korean working environment; PDF-based 3D engineering platform; granted patent; POSCO 1st-prize R&D.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="wrap">
+  <h2>Contact</h2>
+  <p>
+    Open to Senior TPM / AI imaging product roles in Taiwan (or remote /
+    relocation for the right team). Best reach is email — usually within 24 hours.
+  </p>
+  <div class="links">
+    <a class="btn primary" href="mailto:cstacy913@gmail.com">cstacy913@gmail.com</a>
+    <a class="btn" href="https://www.linkedin.com/in/yhtseng91/" target="_blank" rel="noopener">LinkedIn</a>
+    <a class="btn" href="https://github.com/hsuani" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>© <span id="year"></span> Yu-Hsuan Tseng · Built as a static site on GitHub Pages.</p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
