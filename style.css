@@ -404,3 +404,61 @@ section h2 {
   background: var(--primary);
   color: #ffffff;
 }
+
+/* WHY ME section */
+#why .lede {
+  font-size: 1.05em;
+  color: var(--text-2, #555);
+  margin-bottom: 1.5rem;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.why-card {
+  background: var(--card-bg, #fafafa);
+  border-left: 3px solid var(--primary);
+  padding: 1.1rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.95em;
+}
+
+.why-card h3 {
+  margin: 0 0 0.6rem 0;
+  font-size: 1.05em;
+  color: var(--primary);
+}
+
+.why-card p {
+  margin: 0 0 0.6rem 0;
+  line-height: 1.5;
+}
+
+.why-card p:last-child {
+  margin-bottom: 0;
+}
+
+.why-numbers {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.86em;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 0.5rem 0.7rem;
+  border-radius: 4px;
+  line-height: 1.5;
+}
+
+.why-cta {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border, #e5e5e5);
+  font-size: 0.95em;
+  color: var(--muted);
+}
+
+.why-cta a {
+  color: var(--primary);
+}

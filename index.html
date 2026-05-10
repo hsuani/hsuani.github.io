@@ -24,6 +24,7 @@
   <div class="wrap">
     <a class="brand" href="#top">hsuani</a>
     <nav>
+      <a href="#why">Why me</a>
       <a href="#about">About</a>
       <a href="#projects">Projects</a>
       <a href="#publications">Publications</a>
@@ -56,6 +57,99 @@
     <a class="btn" href="https://www.linkedin.com/in/yhtseng91/" target="_blank" rel="noopener">LinkedIn</a>
     <a class="btn" href="mailto:cstacy913@gmail.com">Email</a>
   </div>
+</section>
+
+<!-- WHY ME -->
+<section id="why" class="wrap">
+  <h2>Why this candidate</h2>
+  <p class="lede">
+    Five things that separate me from a generic ML / TPM candidate for an
+    <strong>NVIDIA Metropolis (Manufacturing)</strong> role:
+  </p>
+
+  <div class="why-grid">
+
+    <article class="why-card">
+      <h3>1. ISP &rarr; AOI bridge, with measured numbers</h3>
+      <p>
+        Two years tuning sensor-level ISP modules at <strong>Qualcomm</strong>
+        (noise, exposure, alignment, IQ validation across mobile + PC platforms).
+        I'm now applying that same physical model to industrial defect detection
+        — the unique angle is that <strong>image quality is upstream of every
+        downstream AOI metric</strong>, and it shows in instrumented results, not slides.
+      </p>
+      <p class="why-numbers">
+        Trained YOLOv8s-seg on MVTec AD &mdash; mAP@50 0.75 (mask) on metal_nut.
+        TensorRT INT8 5.22&times; speedup on Tesla T4, 1.13&times; further on L4.
+        DeepStream 9.0 multi-stream pipeline at 4&nbsp;streams &times; 116 fps =
+        <strong>465 img/s aggregate</strong>, 3.8&times; over the typical 30 fps/stream SLA.
+      </p>
+    </article>
+
+    <article class="why-card">
+      <h3>2. Pre-registered hypotheses, then measured reality</h3>
+      <p>
+        Before running the ISP-aware robustness study, I committed
+        <a href="https://github.com/hsuani/aoi-deepstream-tensorrt/blob/main/docs/adr/0007-isp-aware-perturbation-hypotheses.md" target="_blank" rel="noopener">ADR-0007</a>
+        with four explicit predictions. Eval results disagreed with two of them
+        &mdash; and that's the value. Engineering rigor most ML candidates skip:
+        treat your own predictions like you'd treat a vendor's claims.
+      </p>
+      <p class="why-numbers">
+        Predicted ranking: NOISE &gt; EXPOSURE &gt; ALIGNMENT.
+        Real ranking: <strong>NOISE &gt;&gt;&gt; ALIGNMENT &gt; EXPOSURE</strong>.
+        Wrote the gap analysis up front, not after the fact.
+      </p>
+    </article>
+
+    <article class="why-card">
+      <h3>3. Diagnosed a 95% deployment-robustness gap nobody benchmarks</h3>
+      <p>
+        Lab-clean MVTec mAP 0.75 collapses to <strong>0.03 (-95%)</strong> under
+        production-line normal sensor noise (SNR 30-40 dB &mdash; an LED 1-6 months
+        aged plus minor camera drift). The training pipeline had zero noise
+        augmentation; any real-world deployment is fully OOD. Mitigation reuses
+        the same Poisson + Gaussian noise model that produced the INT8 calibration
+        cache &mdash; calibration physics and training augmentation become one
+        artifact instead of two disconnected workflows.
+      </p>
+    </article>
+
+    <article class="why-card">
+      <h3>4. Full NV-stack hands-on, not single-layer</h3>
+      <p>
+        Worked through every stage: <strong>PyTorch fine-tune</strong> (M5 MPS) &rarr;
+        <strong>ONNX export</strong> with dynamic batch &rarr; <strong>TensorRT
+        engine builds</strong> with custom <code>IInt8EntropyCalibrator2</code> &rarr;
+        <strong>DeepStream 9.0 pipeline</strong> (skill-orchestrated via NVIDIA's
+        <code>deepstream-byovm</code>, custom YOLOv8-seg parser, 4-stream batched
+        inference). Not "I have certificates"; it runs end-to-end, the engines
+        and PDF benchmark report are committed.
+      </p>
+    </article>
+
+    <article class="why-card">
+      <h3>5. TPM record, not just an engineer</h3>
+      <p>
+        At <strong>Meitu</strong> (Evelab Insight): orchestrated the end-to-end
+        Product Life Cycle of a customer-critical multimodal AI feature &mdash;
+        problem framing to global production release in 1 month against a 6-month
+        original engineering estimate (<strong>83% PLC time reduction</strong>;
+        20% post-launch sales lift reported). Earlier: led a 3-engineer team in
+        Seoul (Korean working language, granted patent, POSCO 1st-prize R&amp;D 2019).
+        Multilingual cross-functional alignment in EN / 中 / 한.
+      </p>
+    </article>
+
+  </div>
+
+  <p class="why-cta">
+    Detailed evidence: the
+    <a href="https://github.com/hsuani/aoi-deepstream-tensorrt" target="_blank" rel="noopener">aoi-deepstream-tensorrt repo</a>
+    (private; access on request) carries 7 ADRs, 8 Epics, a 4-entry risk register,
+    daily notes, and full benchmark reports. The
+    <a href="assets/CV.pdf" download>CV PDF</a> integrates the same numbers.
+  </p>
 </section>
 
 <!-- ABOUT -->
