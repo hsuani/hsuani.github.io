@@ -408,7 +408,7 @@ section h2 {
 /* WHY ME section */
 #why .lede {
   font-size: 1.05em;
-  color: var(--text-2, #555);
+  color: var(--text);
   margin-bottom: 1.5rem;
 }
 
@@ -420,45 +420,58 @@ section h2 {
 }
 
 .why-card {
-  background: var(--card-bg, #fafafa);
-  border-left: 3px solid var(--primary);
-  padding: 1.1rem 1.25rem;
-  border-radius: 6px;
-  font-size: 0.95em;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  padding: 1.2rem 1.4rem;
+  border-radius: var(--radius);
+  font-size: 0.96em;
+  color: var(--text);
+  box-shadow: var(--shadow);
 }
 
 .why-card h3 {
-  margin: 0 0 0.6rem 0;
-  font-size: 1.05em;
+  margin: 0 0 0.7rem 0;
+  font-size: 1.08em;
   color: var(--primary);
+  font-weight: 600;
 }
 
 .why-card p {
-  margin: 0 0 0.6rem 0;
-  line-height: 1.5;
+  margin: 0 0 0.7rem 0;
+  line-height: 1.55;
+  color: var(--text);
 }
 
 .why-card p:last-child {
   margin-bottom: 0;
 }
 
+.why-card a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
 .why-numbers {
   font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 0.86em;
-  background: rgba(0, 0, 0, 0.04);
-  padding: 0.5rem 0.7rem;
-  border-radius: 4px;
-  line-height: 1.5;
+  font-size: 0.85em;
+  background: var(--primary-soft);
+  color: var(--text);
+  padding: 0.65rem 0.85rem;
+  border-radius: 6px;
+  line-height: 1.55;
+  border-left: 2px solid var(--accent);
 }
 
 .why-cta {
   margin-top: 1.5rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--border, #e5e5e5);
+  border-top: 1px solid var(--border);
   font-size: 0.95em;
-  color: var(--muted);
+  color: var(--text-soft);
 }
 
 .why-cta a {
-  color: var(--primary);
+  color: var(--accent);
+  text-decoration: underline;
 }
