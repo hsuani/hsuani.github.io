@@ -91,14 +91,17 @@
       <p>
         Before running the ISP-aware robustness study, I committed
         <a href="https://github.com/hsuani/aoi-deepstream-tensorrt/blob/main/docs/adr/0007-isp-aware-perturbation-hypotheses.md" target="_blank" rel="noopener">ADR-0007</a>
-        with four explicit predictions. Eval results disagreed with two of them
-        &mdash; and that's the value. Engineering rigor most ML candidates skip:
-        treat your own predictions like you'd treat a vendor's claims.
+        with four explicit predictions, then published the verdicts after the
+        13-cell eval matrix ran. Engineering rigor most ML candidates skip:
+        treat your own predictions like you'd treat a vendor's claims, and
+        report the misses just as clearly as the hits.
       </p>
       <p class="why-numbers">
         Predicted ranking: NOISE &gt; EXPOSURE &gt; ALIGNMENT.
         Real ranking: <strong>NOISE &gt;&gt;&gt; ALIGNMENT &gt; EXPOSURE</strong>.
-        Wrote the gap analysis up front, not after the fact.
+        H1 partially wrong (magnitude wildly underestimated, exposure / alignment swapped),
+        H3 correct within tolerance, H2 deferred to L4 cross-precision rerun,
+        H4 inconclusive. Gap analysis written up front, not after the fact.
       </p>
     </article>
 
@@ -113,6 +116,15 @@
         cache &mdash; calibration physics and training augmentation become one
         artifact instead of two disconnected workflows.
       </p>
+      <p class="why-numbers">
+        Per-defect breakdown (52 sub-evals) surfaced three non-obvious behaviors:
+        <strong>flip is alignment-invariant</strong> (rotation-equivariant features
+        learned for the orientation-anomaly class),
+        <strong>color baseline is the aggregate bottleneck</strong> (0.396) but
+        <em>slightly improves</em> under exposure gain (tonal-contrast cue),
+        and <strong>scratch + noise is the most fragile pairing</strong>
+        (high-frequency cue drowns first).
+      </p>
     </article>
 
     <article class="why-card">
@@ -123,8 +135,10 @@
         engine builds</strong> with custom <code>IInt8EntropyCalibrator2</code> &rarr;
         <strong>DeepStream 9.0 pipeline</strong> (skill-orchestrated via NVIDIA's
         <code>deepstream-byovm</code>, custom YOLOv8-seg parser, 4-stream batched
-        inference). Not "I have certificates"; it runs end-to-end, the engines
-        and PDF benchmark report are committed.
+        inference at <strong>465 img/s aggregate</strong> on a GCP L4). Not
+        "I have certificates"; it runs end-to-end, the engines, calibration
+        cache, PDF benchmark report, ADR log, sprint-narrative companion, and
+        graphviz architecture diagram are all committed.
       </p>
     </article>
 
@@ -186,11 +200,14 @@
       </p>
       <p>
         In parallel, I'm running a focused 2-week sprint on the NVIDIA
-        inference stack — building an industrial AOI defect detection MVP
-        through PyTorch → ONNX → TensorRT → DeepStream. The work
-        deliberately bridges my ISP/imaging background to AOI: image
-        quality is upstream of every downstream metric, and that perspective
-        shapes calibration set design and robustness evaluation.
+        inference stack — an industrial AOI defect detection MVP through
+        PyTorch → ONNX → TensorRT → DeepStream 9.0, currently mid-Stage-3
+        with the deploy pipeline shipped (465 img/s aggregate on a GCP L4)
+        and the ISP-aware robustness study landed. The work deliberately
+        bridges my ISP/imaging background to AOI: image quality is upstream
+        of every downstream metric, and that perspective shapes calibration
+        set design, robustness eval matrix, and the proposed mitigation
+        that unifies INT8 calibration physics with training-time augmentation.
       </p>
     </div>
     <aside class="quick-facts">
@@ -229,24 +246,61 @@
       count — empirically motivating anomaly-detection paradigm for
       positional-anomaly-dominant cases.
     </p>
+    <img src="assets/img/aoi/architecture.png"
+         alt="AOI architecture — shared YOLOv8s-seg model with two inference branches: DeepStream deploy (D5-D7) and ISP-aware robustness eval (D8-D9)"
+         style="width:100%;border-radius:6px;margin:0.5rem 0;" loading="lazy" />
     <img src="assets/img/aoi/trt_benchmark_t4.png"
          alt="TensorRT FP32/FP16/INT8 benchmark on Tesla T4 — latency, throughput, engine size"
          style="width:100%;border-radius:6px;margin:0.5rem 0;" loading="lazy" />
     <ul class="project-bullets">
-      <li><strong>Model</strong>: YOLOv8s-seg fine-tuned on MVTec metal_nut → mAP@50 0.75 (mask).</li>
+      <li><strong>Model</strong>: YOLOv8s-seg fine-tuned on MVTec metal_nut → mAP@50 0.75 (mask);
+        3-class iteration study showed supervised-seg ceiling depends on
+        defect-type composition (surface vs positional) more than sample count.</li>
       <li><strong>TensorRT optimization (Tesla T4, batch=1, imgsz=640)</strong>:
         FP16 <strong>3.13× speedup</strong> (10.91 → 3.49 ms),
-        INT8 <strong>5.22×</strong> (10.91 → 2.09 ms, 478 qps) over FP32.</li>
+        INT8 <strong>5.22×</strong> (10.91 → 2.09 ms, 478 qps) over FP32.
+        L4 INT8 1.13× further (1.78 ms, 540 qps).</li>
       <li><strong>INT8 calibration</strong>: implemented <code>IInt8EntropyCalibrator2</code>
-        with 335 MVTec metal_nut images; functional drift FP16 &lt; 0.001%, INT8 8.6%.</li>
-      <li><strong>ISP-aware framing</strong>: leveraged Qualcomm ISP background
-        for calibration set composition + planned robustness study under sensor
-        perturbations.</li>
-      <li><strong>DeepStream pipeline integration</strong> in progress
-        (NVIDIA LaunchPad / Brev).</li>
+        with 335 MVTec metal_nut images; functional drift FP16 &lt; 0.001%, INT8 8.6%.
+        Calibration cache portable across GPU tiers (T4 → L4) saved ~5-15 min recalibration per target.</li>
+      <li><strong>DeepStream 9.0 multi-stream pipeline (GCP L4)</strong>:
+        4 streams × 116 fps = <strong>465 img/s aggregate</strong>, 3.8× the typical
+        30 fps/stream SLA. Skill-orchestrated via NVIDIA's <code>deepstream-byovm</code>,
+        det-only path per ADR-0006. KITTI dump confirms parser correctness
+        (9876 metal_nut detections in a 4-stream window).</li>
+      <li><strong>ISP-aware robustness study (D8-D9)</strong>:
+        13-cell mAP@50 matrix (3 perturbations × 3 severities + combined-apply),
+        per-defect breakdown over 52 sub-evals. 4 hypotheses pre-registered in
+        ADR-0007 before any eval; verdicts published transparently.</li>
+      <li><strong>95% mAP collapse diagnosis</strong>: production-line normal
+        sensor noise (SNR 30-40 dB) drops mAP 0.75 → 0.03. Training had zero
+        noise augmentation; mitigation reuses the calibration-set Poisson +
+        Gaussian noise model as a training transform — one physical noise model
+        bridges quantization design with deployment robustness.</li>
+      <li><strong>Per-defect insight</strong> (NV-relevant): flip is
+        alignment-invariant (rotation-equivariant features learned),
+        color baseline (0.396) is the aggregate-mAP bottleneck but
+        <em>slightly improves under exposure gain</em>, scratch + noise is
+        the most fragile pairing.</li>
+      <li><strong>Outstanding work, transparently scoped</strong>:
+        cross-precision FP32 / FP16 / INT8 robustness matrix on L4
+        (verifies INT8-noise compound hypothesis), aggregated heatmap PNG,
+        noise-augmented retrain to convert proposed mitigation into demonstrated.
+        Tracked in <code>notes/day-09.md</code>.</li>
     </ul>
+    <a class="video-card"
+       href="assets/img/aoi/deepstream_demo.gif"
+       target="_blank" rel="noopener"
+       aria-label="Open DeepStream demo animation full size">
+      <img src="assets/img/aoi/deepstream_demo.gif"
+           alt="DeepStream pipeline demo — per-frame defect detection on MVTec metal_nut test set"
+           loading="lazy" />
+      <span class="video-caption">DeepStream pipeline demo (28 sec)</span>
+    </a>
     <div class="links inline">
       <a class="btn small" href="https://github.com/hsuani/aoi-deepstream-tensorrt" target="_blank" rel="noopener">GitHub repo</a>
+      <a class="btn small" href="https://github.com/hsuani/aoi-deepstream-tensorrt/blob/main/docs/sprint-narrative.md" target="_blank" rel="noopener">Sprint narrative</a>
+      <a class="btn small" href="https://github.com/hsuani/aoi-deepstream-tensorrt/blob/main/benchmarks/robustness.md" target="_blank" rel="noopener">Robustness study</a>
     </div>
     <p class="project-note">Active development — repo updated daily; access on request if private.</p>
   </article>
