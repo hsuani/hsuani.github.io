@@ -91,17 +91,24 @@
       <p>
         Before running the ISP-aware robustness study, I committed
         <a href="https://github.com/hsuani/aoi-deepstream-tensorrt/blob/main/docs/adr/0007-isp-aware-perturbation-hypotheses.md" target="_blank" rel="noopener">ADR-0007</a>
-        with four explicit predictions, then published the verdicts after the
-        13-cell eval matrix ran. Engineering rigor most ML candidates skip:
-        treat your own predictions like you'd treat a vendor's claims, and
-        report the misses just as clearly as the hits.
+        with four explicit predictions, then published the verdicts after
+        the 13-cell eval matrix ran &mdash; including a follow-up
+        cross-precision rerun on a GCP L4 that promoted FP16 from
+        "production via latency" to "production via robustness parity verified".
+        Engineering rigor most ML candidates skip: treat your own
+        predictions like you'd treat a vendor's claims, and report the
+        misses just as clearly as the hits.
       </p>
       <p class="why-numbers">
         Predicted ranking: NOISE &gt; EXPOSURE &gt; ALIGNMENT.
         Real ranking: <strong>NOISE &gt;&gt;&gt; ALIGNMENT &gt; EXPOSURE</strong>.
-        H1 partially wrong (magnitude wildly underestimated, exposure / alignment swapped),
-        H3 correct within tolerance, H2 deferred to L4 cross-precision rerun,
-        H4 inconclusive. Gap analysis written up front, not after the fact.
+        H1 partially wrong (magnitude wildly underestimated, exposure / alignment swapped);
+        H2 half-answered (FP16 &equiv; FP32 functionally on L4, max drift 0.0005 mAP;
+        INT8 deferred via
+        <a href="https://github.com/hsuani/aoi-deepstream-tensorrt/blob/main/docs/adr/0008-trt-10-14-int8-tactic-gap-yolov8seg.md" target="_blank" rel="noopener">ADR-0008</a>
+        on a TRT 10.14 tactic gap);
+        H3 correct within tolerance;
+        H4 inconclusive.
       </p>
     </article>
 
@@ -132,13 +139,16 @@
       <p>
         Worked through every stage: <strong>PyTorch fine-tune</strong> (M5 MPS) &rarr;
         <strong>ONNX export</strong> with dynamic batch &rarr; <strong>TensorRT
-        engine builds</strong> with custom <code>IInt8EntropyCalibrator2</code> &rarr;
+        engine builds</strong> with custom <code>IInt8EntropyCalibrator2</code>,
+        cross-precision FP32 / FP16 robustness verification on L4
+        (max drift 0.0005 mAP &mdash; FP16 inherits FP32 fully), and a
+        scoped INT8 tactic-gap writeup &rarr;
         <strong>DeepStream 9.0 pipeline</strong> (skill-orchestrated via NVIDIA's
         <code>deepstream-byovm</code>, custom YOLOv8-seg parser, 4-stream batched
         inference at <strong>465 img/s aggregate</strong> on a GCP L4). Not
-        "I have certificates"; it runs end-to-end, the engines, calibration
-        cache, PDF benchmark report, ADR log, sprint-narrative companion, and
-        graphviz architecture diagram are all committed.
+        "I have certificates"; engines, calibration cache, PDF benchmark report,
+        8 ADRs, sprint-narrative companion, and graphviz architecture diagram
+        are all committed.
       </p>
     </article>
 
@@ -202,12 +212,15 @@
         In parallel, I'm running a focused 2-week sprint on the NVIDIA
         inference stack — an industrial AOI defect detection MVP through
         PyTorch → ONNX → TensorRT → DeepStream 9.0, currently mid-Stage-3
-        with the deploy pipeline shipped (465 img/s aggregate on a GCP L4)
-        and the ISP-aware robustness study landed. The work deliberately
-        bridges my ISP/imaging background to AOI: image quality is upstream
-        of every downstream metric, and that perspective shapes calibration
-        set design, robustness eval matrix, and the proposed mitigation
-        that unifies INT8 calibration physics with training-time augmentation.
+        with the deploy pipeline shipped (465 img/s aggregate on a GCP L4),
+        the ISP-aware robustness study landed, and a cross-precision
+        FP32 / FP16 rerun on L4 confirming FP16 inherits the FP32 robustness
+        profile fully. The work deliberately bridges my ISP/imaging
+        background to AOI: image quality is upstream of every downstream
+        metric, and that perspective shapes calibration set design,
+        robustness eval matrix, hypothesis pre-registration discipline, and
+        the proposed mitigation that unifies INT8 calibration physics with
+        training-time augmentation.
       </p>
     </div>
     <aside class="quick-facts">
@@ -282,12 +295,28 @@
         color baseline (0.396) is the aggregate-mAP bottleneck but
         <em>slightly improves under exposure gain</em>, scratch + noise is
         the most fragile pairing.</li>
-      <li><strong>Outstanding work, transparently scoped</strong>:
-        cross-precision FP32 / FP16 / INT8 robustness matrix on L4
-        (verifies INT8-noise compound hypothesis), aggregated heatmap PNG,
-        noise-augmented retrain to convert proposed mitigation into demonstrated.
-        Tracked in <code>notes/day-09.md</code>.</li>
+      <li><strong>Cross-precision rerun on L4 (TRT 10.14)</strong>:
+        FP16 ≡ FP32 functionally across all 13 cells (max abs drift
+        0.0005 mAP; production-relevant cells &lt; 0.0001). Promotes FP16
+        from "production precision via latency" to "production precision
+        via robustness parity verified" (reinforces ADR-0005).</li>
+      <li><strong>INT8 scoped + deferred (ADR-0008)</strong>:
+        TRT 10.14 lacks a tactic for the YOLOv8-seg proto Conv+Sigmoid+Mul
+        fusion under entropy calibration; path forward is QAT migration or
+        TRT future-version tactic coverage. Documented as a scoped gap,
+        not a hidden failure.</li>
+      <li><strong>Engine-path drift finding</strong>: Mac PyTorch vs L4
+        TRT engine show 2× noise_s1 mAP gap (0.034 vs 0.073) despite under-1%
+        clean-baseline drift. Likely NMS / interpolation / proto-mask
+        numerical precision; bisect deferred. Deployment-realistic number
+        is the L4 TRT one; Mac path is a lower-bound iteration surface.</li>
+      <li><strong>Soft outstanding</strong>: label-transform-aware
+        alignment cells, noise-augmented retrain (proposed → demonstrated),
+        Mac-vs-L4 drift bisect. Tracked in <code>notes/day-09.md</code>.</li>
     </ul>
+    <img src="assets/img/aoi/robustness_plot.png"
+         alt="Robustness matrix heatmap — 13 perturbed val cells × {Mac PyTorch FP32, L4 TRT FP32, L4 TRT FP16}; INT8 deferred per ADR-0008"
+         style="width:100%;border-radius:6px;margin:0.5rem 0;" loading="lazy" />
     <a class="video-card"
        href="assets/img/aoi/deepstream_demo.gif"
        target="_blank" rel="noopener"
